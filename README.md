@@ -1,6 +1,6 @@
 # EZ2
 
-Updated Python implementation of the R package "EZ2" that accompanies the paper
+Updated Python module implementation of the R package "EZ2" that accompanies the paper
 
 > Grasman, R. P. P., Wagenmakers, E.-J., & van der Maas, H. L. J. (2007). On the mean and variance of response times under the diffusion model with an application to parameter estimation, _J. Math. Psych._ 53: 55-68.
 
