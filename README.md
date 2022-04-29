@@ -89,16 +89,16 @@ print(pd.concat([par_df,dat_df],axis=1))
 
  # specify the model expressions for each column
 column_models = [
-     'EZ2.vrt(v0,z,a)',        # first column: vrt0
-     'EZ2.pe(v0,z,a)',         # second column: pe0
-     'EZ2.vrt(v1,a-z,a)',      # third column: vrt1, starting point = a-z
-     'EZ2.pe(v1, a-z, a)']     # fourth column: pe1
+     'vrt(v0,z,a)',        # first column: vrt0
+     'pe(v0,z,a)',         # second column: pe0
+     'vrt(v1,a-z,a)',      # third column: vrt1, starting point = a-z
+     'pe(v1, a-z, a)']     # fourth column: pe1
 
 # solve for parameters: try 16 random starting values for each row
 pstart = {'v0': 0.17, 'v1': 0.15, 'z': 0.12, 'a': 0.25}
 
 random.seed(11)
-ez2fit = EZ2.batch(pstart, column_model, dat_df, nrestart=16, tol=1e-15)
+ez2fit = EZ2.batch(pstart, column_models, dat_df, nrestart=16, tol=1e-15)
 ez2fit
 ```
 
