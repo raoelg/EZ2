@@ -86,8 +86,9 @@ print(pd.concat([par_df,dat_df],axis=1))
 
 ```python
 ## recover the parameters from the pretend data `dat_df`
+import random
 
- # specify the model expressions for each column
+# specify the model expressions for each column
 column_models = [
      'vrt(v0,z,a)',        # first column: vrt0
      'pe(v0,z,a)',         # second column: pe0
