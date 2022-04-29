@@ -967,7 +967,7 @@ def batch(pstart, column_models, data, nrestart = 4, **kwargs):
          pstart = {'v0': 0.17, 'v1': 0.15, 'z': 0.12, 'a': 0.25}
 
          random.seed(11)
-         ez2fit = EZ2.batch(pstart, column_model, dat_df, nrestart=16, tol=1e-15)
+         ez2fit = EZ2.batch(pstart, column_models, dat_df, nrestart=16, tol=1e-15)
          ez2fit
 
     """
