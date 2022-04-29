@@ -5,6 +5,7 @@
 from scipy import optimize
 import numpy as np
 import pandas as pd
+import random
 
 
 def cmrt(nu, z, a, Ter=0, s = 0.1, GRAD=False):
@@ -957,10 +958,10 @@ def batch(pstart, column_models, data, nrestart = 4, **kwargs):
 
          # specify the model expressions for each column
          column_models = [
-             'EZ2.vrt(v0,z,a)',        # first column: vrt0
-             'EZ2.pe(v0,z,a)',         # second column: pe0
-             'EZ2.vrt(v1,a-z,a)',      # third column: vrt1, starting point = a-z
-             'EZ2.pe(v1, a-z, a)']     # fourth column: pe1
+             'vrt(v0,z,a)',        # first column: vrt0
+             'pe(v0,z,a)',         # second column: pe0
+             'vrt(v1,a-z,a)',      # third column: vrt1, starting point = a-z
+             'pe(v1, a-z, a)']     # fourth column: pe1
 
          # solve for parameters: try 16 random starting values for each row
          pstart = {'v0': 0.17, 'v1': 0.15, 'z': 0.12, 'a': 0.25}
