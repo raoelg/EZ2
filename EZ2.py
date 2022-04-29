@@ -1,6 +1,6 @@
 #### EZ2
 #### author: Raoul P. P. P. Grasman
-#### License:
+#### License: Apache License 2.0
 
 from scipy import optimize
 import numpy as np
