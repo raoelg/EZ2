@@ -154,35 +154,27 @@ See `help(batch)` or `help(EZ2)` for documentation of the available function.
   <tbody>
     <tr>
       <th>data2ez</th>
-      <td>Convert observed sample moments to diffusion parameter values of       a drift diffusion process with absorbing boundaries 0 and a,       starting at a/2.</td>
+      <td>Convert observed sample moments to parameter values of       the 'EZ' drift diffusion process with absorbing boundaries 0 and a,       starting at a/2.</td>
     </tr>
     <tr>
-      <th>cmrt</th>
-      <td>Compute exit (decision) time mean and variance _conditional_ on exit     throught the bottom boundary of a diffusion process between absorbing    boundaries.</td>
+      <th>cmrt, cvrt</th>
+      <td>Compute exit (decision) time mean and variance _conditional_ on exit     through the bottom boundary (chosen alternative) of a diffusion process between absorbing    boundaries.</td>
     </tr>
     <tr>
-      <th>cvrt</th>
-      <td>Compute exit (decision) time mean and variance _conditional_ on exit point (chosen    alternative) of a diffusion process</td>
-    </tr>
-    <tr>
-      <th>mrt</th>
-      <td>Compute exit/decision time mean and variance irrespective of exit     point/chosen alternative</td>
-    </tr>
-    <tr>
-      <th>vrt</th>
-      <td>Compute exit/decision time variance irrespective of exit point/chosen     alternative</td>
+      <th>mrt, vrt</th>
+      <td>Compute exit/decision time mean and variance irrespective of exit     point (chosen alternative)</td>
     </tr>
     <tr>
       <th>pe</th>
-      <td>Compute probability of exit through lower bound of a diffusion with    constant drift</td>
+      <td>Compute probability of exit through lower bound of a drift diffusion with    constant drift</td>
     </tr>
     <tr>
       <th>ez2_2afc</th>
-      <td>Fit simple diffusion model to observed sample moments of 2AFC task responses.</td>
+      <td>Fit simple drift diffusion model to observed sample moments of 2AFC task responses. Convenience wrapper function for EZ2().</td>
     </tr>
     <tr>
       <th>EZ2</th>
-      <td>Fit diffusion model to observed sample moments</td>
+      <td>Fit a simple drift diffusion model to observed sample moments</td>
     </tr>
     <tr>
       <th>batch</th>
@@ -210,7 +202,7 @@ See `help(batch)` or `help(EZ2)` for documentation of the available function.
     </tr>
     <tr>
       <th>ddexit_fit</th>
-      <td>Maximum likelihood estimation of parameters nu, z, a (and optionally an offset)     of a constant drift diffusion process from the exit times of hitting either or both    bounds.        See help(pddexit) for detailed information on the parameters.        Usage:            ddexit_fit(rt, start)            Input:            rt: List like. If len(rt) = 2 then rt[0] is assumed to be a list of             exit times at the bottom boundary, and rt[1] is assumed to be a             list of exit times at the top boundary. Otherwise rt is a list            of exit times either at the top or bottom boundary (specified            through `top_boundary`.                  top_boundary: Bool. True if 'rt' contains exit times at top boundary.            False if 'rt' contains exit times at bottom boundary.                    offset: Bool. Should an additive offset to the exit times be fitted?                method: None or string. Passed onto 'scipy.optimize.minimize'.              *kwargs: Further optional arguments passed on to            'scipy.optimize.minimize'. See help(scipy.optimize.minimize).               Value:            Object returned by 'scipy.optimize.minimize'.                 Attributes:                         x: Estimated parameters.                      hess_inv: Inverse of Hessian matrix at minimum of the negative                    log-likelihood function if method = 'BFGS'. This                    matrix is an approximation to the variance covariance                    matrix of the estimates.                                   ...: See help('scipy.optimize.minimize') for details.                   Author(s):            R. P. P. P. Grasman &lt;r.p.p.p.grasman@uva.nl&gt;            Examples:                np.random.seed(29)            rt = rddexitj(50, nu, z, a)[0] # 2-tuple of bottom and top exit times            ddexit_fit(rt, [.1, .1, .2])                        # exit times with offset            np.random.seed(101)            rt = rddexitj(5000, nu, z, a)[0]            rt = [np.array(rt[0]) + 0.33, np.array(rt[1]) + 0.33]            ddexit_fit(rt, [.2,.1,.17,.1], offset=True)                        # use Nelder-Mead (sometimes more stable, but no Hessian)            ddexit_fit(rt, [.2,.1,.17,.1], offset=True, method='Nelder-Mead')</td>
+      <td>Maximum likelihood estimation of parameters nu, z, a (and optionally an offset)     of a constant drift diffusion process from the exit times of hitting either or both    bounds. </td>
     </tr>
   </tbody>
 </table>
