@@ -35,11 +35,11 @@ First create some fake data. Data generated here are *population* variances and 
 import pandas as pd
 import EZ2
 
- ## create some data (theoretical values, not simulated) for a typic
- ## 2AFC experiment — in this example a lexical decision task
- ## (Needless to say, in reality you would moments computed from real data!)
+## create some data (theoretical values, not simulated) for a typic
+## 2AFC experiment — in this example a lexical decision task
+## (Needless to say, in reality you would moments computed from real data!)
 
- # true parameter values (10 different cases)
+# true parameter values (10 different cases)
 par_df = pd.DataFrame({
      "v0": [0.1 + (0.3-0.1)*i/10 for i in range(11)],
      "v1": [0.15 + (0.4-0.15)*i/10 for i in range(11)],
@@ -47,9 +47,9 @@ par_df = pd.DataFrame({
      "a":  [0.25]*11
  })
 
- # compute the theoretical variance (vrt0) and proportion error (pe0) for 
- # the 'word' response times, and the theoretical variance (vrt1) and error
- # (pe1) for the 'non-word' response times.
+# compute the theoretical variance (vrt0) and proportion error (pe0) for 
+# the 'word' response times, and the theoretical variance (vrt1) and error
+# (pe1) for the 'non-word' response times.
 dat_df = pd.DataFrame({
     'vrt0': eval('EZ2.vrt(v0,z,a)', globals(), par_df),
     'pe0' : eval('EZ2.pe(v0,z,a)', globals(), par_df),
@@ -84,9 +84,29 @@ print(pd.concat([par_df,dat_df],axis=1))
 
 #### Run EZ2
 
+Two options:
+
+1. easy with `ez2_2afc` that precisely suits the 2AFC experiment such as a lexical decision task
+2. slightly more involve `EZ2` that allows for more general models
+
+Both are illustrated:
+
+**option 1**
+
 ```python
-## recover the parameters from the pretend data `dat_df`
-import random
+## recover the parameters from the pretend data `dat_df`: 2AFC experiments
+EZ2.ez2_2afc(dat_df, ['vrt0','pe0','vrt1','pe1'], correct_only=False)
+```
+Here `correct_only = False` signifies that RT variances were compute from all the responses
+regardless of correctness. See `help(ez2_2afc)` for more info. The output is similar as from option 2 below. 
+
+**option 2**
+
+If the data doesn't exactly conform the lexical decision task set up, the more flexible way
+is as follows:
+
+```python
+## recover the parameters from the pretend data `dat_df`: flexible way
 
 # specify the model expressions for each column
 column_models = [
@@ -98,27 +118,95 @@ column_models = [
 # solve for parameters: try 16 random starting values for each row
 pstart = {'v0': 0.17, 'v1': 0.15, 'z': 0.12, 'a': 0.25}
 
-random.seed(11)
-ez2fit = EZ2.batch(pstart, column_models, dat_df, nrestart=16, tol=1e-15)
+ez2fit = EZ2.batch(pstart, column_models, dat_df)
 ez2fit
 ```
 
 The result looks like this:
 
-|    |        v0 |       v1 |        z |        a |        fval |   niter |   status | success   |    norm_jac |
-|---:|----------:|---------:|---------:|---------:|------------:|--------:|---------:|:----------|------------:|
-|  0 | 0.0999994 | 0.15     | 0.120001 | 0.249999 | 4.064e-07 |      17 |        2 | False     | 0.0763213   |
-|  1 | 0.12      | 0.175    | 0.126    | 0.25     | 1.608e-07 |      13 |        2 | False     | 0.150949    |
-|  2 | 0.14      | 0.2      | 0.132    | 0.249999 | 6.837e-08 |       8 |        2 | False     | 0.335807    |
-|  3 | 0.16      | 0.225    | 0.138    | 0.25     | 1.161e-08  |      14 |        2 | False     | 0.163066    |
-|  4 | 0.18      | 0.25     | 0.144    | 0.25     | 2.368e-08 |      12 |        2 | False     | 0.044371    |
-|  5 | 0.2       | 0.274999 | 0.149998 | 0.249999 | 2.586e-08 |      16 |        2 | False     | 3.60527e-08 |
-|  6 | 0.220001  | 0.299996 | 0.155994 | 0.249995 | 3.569e-08 |      19 |        2 | False     | 0.0854866   |
-|  7 | 0.240002  | 0.324993 | 0.16199  | 0.249993 | 9.119e-08 |      23 |        2 | False     | 0.0177482   |
-|  8 | 0.260011  | 0.349955 | 0.167936 | 0.249947 | 2.709e-07 |      12 |        2 | False     | 0.013834    |
-|  9 | 0.28004   | 0.374835 | 0.173783 | 0.249818 | 9.650e-07  |      31 |        2 | False     | 0.00198474  |
-| 10 | 0.300071  | 0.399707 | 0.179626 | 0.249677 | 3.900e-06 |      30 |        2 | False     | 0.00143761  |
+|    |   v0 |    v1 |     z |    a |   niter | success   |   norm_error | message                 |
+|---:|-----:|------:|------:|-----:|--------:|:----------|-------------:|:------------------------|
+|  0 | 0.1  | 0.15  | 0.12  | 0.25 |      18 | True      |  7.76479e-12 | The solution converged. |
+|  1 | 0.12 | 0.175 | 0.126 | 0.25 |      17 | True      |  1.81379e-11 | The solution converged. |
+|  2 | 0.14 | 0.2   | 0.132 | 0.25 |      17 | True      |  1.09059e-12 | The solution converged. |
+|  3 | 0.16 | 0.225 | 0.138 | 0.25 |      18 | True      |  2.34994e-10 | The solution converged. |
+|  4 | 0.18 | 0.25  | 0.144 | 0.25 |      18 | True      |  4.71896e-12 | The solution converged. |
+|  5 | 0.2  | 0.275 | 0.15  | 0.25 |      29 | True      |  9.53827e-15 | The solution converged. |
+|  6 | 0.22 | 0.3   | 0.156 | 0.25 |      27 | True      |  1.13789e-14 | The solution converged. |
+|  7 | 0.24 | 0.325 | 0.162 | 0.25 |      24 | True      |  9.48528e-13 | The solution converged. |
+|  8 | 0.26 | 0.35  | 0.168 | 0.25 |      33 | True      |  5.90823e-12 | The solution converged. |
+|  9 | 0.28 | 0.375 | 0.174 | 0.25 |      28 | True      |  1.74185e-13 | The solution converged. |
+| 10 | 0.3  | 0.4   | 0.18  | 0.25 |      36 | True      |  1.79156e-14 | The solution converged. |
 
-Despite the `success` column indicating `False`, the small `fval` are near zero suggesting a proper solution was found. Comparison of columns `v0`, `v1`, `z` and `a` with the same colums from the true parameter values in the previous table, shows that the true parameter values are retrieved well.
+Comparison of columns `v0`, `v1`, `z` and `a` with the same colums from the true parameter values in the previous table, shows that the true parameter values are retrieved well.
 
 See `help(batch)` or `help(EZ2)` for documentation of the available function.
+
+### List of function
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>data2ez</th>
+      <td>Convert observed sample moments to diffusion parameter values of       a drift diffusion process with absorbing boundaries 0 and a,       starting at a/2.</td>
+    </tr>
+    <tr>
+      <th>cmrt</th>
+      <td>Compute exit (decision) time mean and variance _conditional_ on exit     throught the bottom boundary of a diffusion process between absorbing    boundaries.</td>
+    </tr>
+    <tr>
+      <th>cvrt</th>
+      <td>Compute exit (decision) time mean and variance _conditional_ on exit point (chosen    alternative) of a diffusion process</td>
+    </tr>
+    <tr>
+      <th>mrt</th>
+      <td>Compute exit/decision time mean and variance irrespective of exit     point/chosen alternative</td>
+    </tr>
+    <tr>
+      <th>pe</th>
+      <td>Compute probability of exit through lower bound of a diffusion with    constant drift</td>
+    </tr>
+    <tr>
+      <th>ez2_2afc</th>
+      <td>Fit simple diffusion model to observed sample moments of 2AFC task responses.</td>
+    </tr>
+    <tr>
+      <th>EZ2</th>
+      <td>Fit diffusion model to observed sample moments</td>
+    </tr>
+    <tr>
+      <th>batch</th>
+      <td>Batch EZ2 model fitting</td>
+    </tr>
+    <tr>
+      <th>pddexit</th>
+      <td>Cumulative distribution, density and quantile functions of exit times from     top or bottom boundary of a drift diffusion process.</td>
+    </tr>
+    <tr>
+      <th>dddexit</th>
+      <td>Compute the density of exit times from top or bottom boundary of a drift     diffusion process.</td>
+    </tr>
+    <tr>
+      <th>qddexit</th>
+      <td>Compute the quantiles for the cumulative distribution function of     exit times from top or bottom boundary of a drift diffusion process.</td>
+    </tr>
+    <tr>
+      <th>rddexit</th>
+      <td>Generate random sample of exit times from top or bottom boundary of a     drift diffusion process.</td>
+    </tr>
+    <tr>
+      <th>rddexitj</th>
+      <td>Generate random sample of exit times from top and bottom boundaries of a     drift diffusion process.</td>
+    </tr>
+    <tr>
+      <th>ddexit_fit</th>
+      <td>Maximum likelihood estimation of parameters nu, z, a (and optionally an offset)     of a constant drift diffusion process from the exit times of hitting either or both    bounds.</td>
+    </tr>
+  </tbody>
+</table>
