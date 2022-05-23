@@ -6,6 +6,15 @@ Updated Python module implementation of the R package "EZ2" that accompanies the
 
 ![EZ diffusion model for response times](https://media.springernature.com/lw685/springer-static/image/art%3A10.3758%2Fs13423-016-1081-y/MediaObjects/13423_2016_1081_Fig1_HTML.gif?as=webp)
 
+
+### Installation
+
+The package is also available from [pypi.org](https://pypi.org/project/EZ2/). The easiest way to install is
+
+```bash
+pip install EZ2
+```
+
 ### Example
 
 
@@ -29,7 +38,6 @@ For the lexical decision task example it is often hypothesized that the drift ra
 #### Generate data
 
 First create some fake data. Data generated here are *population* variances and percentages of error responses for a number of sets of diffusion model parameter values. (This could correspond to different subjects having different values of _v<sub>0</sub>_, _v<sub>1</sub>_, _z_, and _a_.) In practice you would use of course _estimated_ variances and error percentages for each subject from the recorded response times for each subject.
-
 
 ```python
 import pandas as pd
